@@ -1,0 +1,4 @@
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+COPY target/*.jar invoice-pdf-analyzer.jar
+ENTRYPOINT ["java","-jar","/invoice-pdf-analyzer.jar"]

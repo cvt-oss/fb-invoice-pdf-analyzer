@@ -1,0 +1,41 @@
+version: "3.7"
+
+
+services:
+  psql:
+    container_name: "postgresql-container"
+    image: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "psql-data:/var/lib/postgresql/data"
+    networks:
+      - cvt-pdf-analyzer-network
+    environment:
+      - POSTGRES_PASSWORD
+      - POSTGRES_USER
+      - POSTGRES_DB  
+
+  pdf-analyzer:
+    container_name: "invoice-pdf-analyzer-container"
+    build:
+      context: .
+      dockerfile: Dockerfile.pdfanalyzer
+    image: cvt/invoice-pdf-analyzer:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - psql      
+    networks:
+      - cvt-pdf-analyzer-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://psql:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+volumes:
+  psql-data:
+
+networks:
+  cvt-pdf-analyzer-network:
+
