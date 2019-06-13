@@ -16,6 +16,7 @@
 .project
 .recommenders
 .settings
+.env
 .springBeans
 /build
 /code
