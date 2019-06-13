@@ -2,7 +2,6 @@ package cz.cvt.pdf.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,14 +23,14 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
 
     // Matches following string
     // Od 30. 12. 2018 13:00 do 19. 1. 2019 15:56
-    private static final String CAMPAING_DELIMITER_REGEXP = "Od\\s\\d{1,2}\\.\\s\\d{1,2}\\.\\s\\d{4}\\s\\d{1,2}:\\d{1,2}\\sdo\\s\\d{1,2}\\.\\s\\d{1,2}\\.\\s\\d{4}\\s\\d{1,2}:\\d{1,2}";
-    private static final String METADATA_END_DELIMITER = "Kampaně";
-    private static final String INVOICE_END = "Facebook Ireland Limited";
-    private static final String PAID_ON = "Datum platby";
-    private static final String TRANSACTION_ID = "ID transakce";
-    private static final String AMOUNT_PAID = "Placeno";
-    private static final String REFERENTIAL_NUMBER = "Referenční číslo: ";
-    private static final String ACCOUNT_ID = "ID účtu: ";
+    public static final String CAMPAING_DELIMITER_REGEXP = "Od\\s\\d{1,2}\\.\\s\\d{1,2}\\.\\s\\d{4}\\s\\d{1,2}:\\d{1,2}\\sdo\\s\\d{1,2}\\.\\s\\d{1,2}\\.\\s\\d{4}\\s\\d{1,2}:\\d{1,2}";
+    public static final String METADATA_END_DELIMITER = "Kampaně";
+    public static final String INVOICE_END = "Facebook Ireland Limited";
+    public static final String PAID_ON = "Datum platby";
+    public static final String TRANSACTION_ID = "ID transakce";
+    public static final String AMOUNT_PAID = "Placeno";
+    public static final String REFERENTIAL_NUMBER = "Referenční číslo: ";
+    public static final String ACCOUNT_ID = "ID účtu: ";
 
     public Invoice parse(InputStream is) throws IOException {
         PDFTextStripper stripper = new PDFTextStripper();

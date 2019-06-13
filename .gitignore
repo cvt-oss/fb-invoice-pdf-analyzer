@@ -23,8 +23,10 @@ MANIFEST.MF
 _site/
 activemq-data
 bin
+*.code-workspace
 build
 build.log
+*.pdf
 dependency-reduced-pom.xml
 dump.rdb
 interpolated*.xml

@@ -109,4 +109,8 @@ public class Invoice {
         + getPaidOn() + "'" + ", referentialNumber='" + getReferentialNumber() + "'" + "}";
   }
 
+public Long getId() {
+	return id;
+}
+
 }

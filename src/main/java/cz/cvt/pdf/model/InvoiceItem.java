@@ -30,6 +30,9 @@ public class InvoiceItem {
     this.invoice = invoice;
   }
 
+  public InvoiceItem() {
+  }
+
   public InvoiceItem(String campaingName, String price) {
 
     this.campaingName = campaingName;
@@ -55,6 +58,10 @@ public class InvoiceItem {
   @Override
   public String toString() {
     return "InvoiceItem [campaingName=" + campaingName + ", price=" + price + "]";
+  }
+
+  public Long getId() {
+    return id;
   }
 
 }

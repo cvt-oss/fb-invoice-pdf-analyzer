@@ -16,14 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cz.cvt.pdf.model.Invoice;
 import cz.cvt.pdf.persistence.InvoiceRepository;
-import cz.cvt.pdf.service.impl.FacebookParserServiceImpl;
+import cz.cvt.pdf.service.api.InvoiceParserService;
 
 @RestController
 @RequestMapping("/api/pdf")
 public class PDFInvoiceAnalyzerApi {
 
     @Autowired
-    private FacebookParserServiceImpl pdfService;
+    private InvoiceParserService pdfService;
     @Autowired
     private InvoiceRepository invoiceRepository;
 
@@ -31,7 +31,7 @@ public class PDFInvoiceAnalyzerApi {
 
 
     @PostMapping("/processInvoice")
-    public ResponseEntity processInvoice(@RequestParam("invoice") MultipartFile invoiceFile) {
+    public ResponseEntity<String> processInvoice(@RequestParam("invoice") MultipartFile invoiceFile) {
 
         try {
             InputStream is = invoiceFile.getInputStream();
