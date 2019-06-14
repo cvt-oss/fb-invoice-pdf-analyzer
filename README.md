@@ -74,3 +74,14 @@ HTTP/1.1 404
 Content-Length: 0
 Date: Fri, 14 Jun 2019 10:05:29 GMT
 ```
+
+Shutdown:
+```
+docker-compose down 
+```
+
+If you want to clear database content as well:
+
+```
+docker-compose down --volumes
+```
