@@ -23,7 +23,7 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
 
     // Matches following string
     // Od 30. 12. 2018 13:00 do 19. 1. 2019 15:56
-    public static final String CAMPAING_DELIMITER_REGEXP = "Od\\s\\d{1,2}\\.\\s\\d{1,2}\\.\\s\\d{4}\\s\\d{1,2}:\\d{1,2}\\sdo\\s\\d{1,2}\\.\\s\\d{1,2}\\.\\s\\d{4}\\s\\d{1,2}:\\d{1,2}";
+    public static final String CAMPAIGN_DELIMITER_REGEXP = "Od\\s\\d{1,2}\\.\\s\\d{1,2}\\.\\s\\d{4}\\s\\d{1,2}:\\d{1,2}\\sdo\\s\\d{1,2}\\.\\s\\d{1,2}\\.\\s\\d{4}\\s\\d{1,2}:\\d{1,2}";
     public static final String METADATA_END_DELIMITER = "Kampaně";
     public static final String INVOICE_END = "Facebook Ireland Limited";
     public static final String PAID_ON = "Datum platby";
@@ -46,7 +46,7 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
                 invoiceText.indexOf(METADATA_END_DELIMITER) + METADATA_END_DELIMITER.length(),
                 invoiceText.indexOf(INVOICE_END));
 
-        List<String> split = Arrays.asList(invoiceItems.split(CAMPAING_DELIMITER_REGEXP));
+        List<String> split = Arrays.asList(invoiceItems.split(CAMPAIGN_DELIMITER_REGEXP));
 
         for (int i = 0; i < split.size() - 1; i++) {
 
@@ -57,17 +57,17 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
 
             if (i == 0) {
 
-                String campaingName = current.trim();
+                String campaignName = current.trim();
                 String totalPrice = next.split("\\n")[1];
 
-                item = new InvoiceItem(campaingName, totalPrice);
+                item = new InvoiceItem(campaignName, totalPrice);
                 log.debug("invoice item found: \n {}", item);
 
             } else {
                 String[] tmp = current.split("\n");
-                String campaingName = tmp[tmp.length - 1];
+                String campaignName = tmp[tmp.length - 1];
                 String totalPrice = next.split("\n")[1];
-                item = new InvoiceItem(campaingName, totalPrice);
+                item = new InvoiceItem(campaignName, totalPrice);
                 log.debug("invoice item found: \n {}", item);
 
             }

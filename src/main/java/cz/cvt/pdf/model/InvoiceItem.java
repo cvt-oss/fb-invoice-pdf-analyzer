@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class InvoiceItem {
 
-  String campaingName;
+  String campaignName;
   String price;
 
   @Id
@@ -37,18 +37,18 @@ public class InvoiceItem {
   public InvoiceItem() {
   }
 
-  public InvoiceItem(String campaingName, String price) {
+  public InvoiceItem(String campaignName, String price) {
 
-    this.campaingName = campaingName;
+    this.campaignName = campaignName;
     this.price = price;
   }
 
-  public String getCampaingName() {
-    return campaingName;
+  public String getCampaignName() {
+    return campaignName;
   }
 
-  public void setCampaingName(String campaingName) {
-    this.campaingName = campaingName;
+  public void setCampaignName(String campaignName) {
+    this.campaignName = campaignName;
   }
 
   public String getPrice() {
@@ -61,7 +61,7 @@ public class InvoiceItem {
 
   @Override
   public String toString() {
-    return "InvoiceItem [campaingName=" + campaingName + ", price=" + price + "]";
+    return "InvoiceItem [campaignName=" + campaignName + ", price=" + price + "]";
   }
 
   public Long getId() {

@@ -71,7 +71,7 @@ public class TestUtils {
         invoice.getInvoiceItems().forEach(item -> {
 
             try {
-                addLine(contents, item.getCampaingName());
+                addLine(contents, item.getCampaignName());
                 addLine(contents, SAMPLE_DATE);
                 addLine(contents, item.getPrice());
             } catch (IOException e) {
