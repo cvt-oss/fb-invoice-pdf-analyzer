@@ -8,29 +8,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import cz.cvt.pdf.model.Invoice;
-import cz.cvt.pdf.persistence.InvoiceRepository;
-import cz.cvt.pdf.service.api.InvoiceParserService;
-import cz.cvt.pdf.service.impl.FacebookParserServiceImpl;
+import cz.cvt.pdf.service.api.InvoiceResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 
 import static cz.cvt.TestUtils.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @Slf4j
@@ -65,9 +66,20 @@ public class IntegrationTest {
 
         MockMultipartFile pdfInvoice = new MockMultipartFile(PDF_NAME, input);
 
-        mvc.perform(multipart("/api/pdf/processInvoice").file("invoice", pdfInvoice.getBytes()))
-                .andExpect(status().isOk());
+        MvcResult postResult = mvc.perform(multipart("/api/pdf/invoice/process").file("invoice", pdfInvoice.getBytes()))
+                .andExpect(status().isOk()).andReturn();
+        InvoiceResponse r = new ObjectMapper().readValue(postResult.getResponse().getContentAsString(),
+                InvoiceResponse.class);
 
+
+        MvcResult getResult = mvc.perform(get("/api/pdf/invoice/" + r.getId())).andExpect(status().isOk()).andReturn();
+        Invoice returnedInvoice = new ObjectMapper().readValue(getResult.getResponse().getContentAsString(),
+                Invoice.class);
+        assertThat(returnedInvoice).isEqualTo(invoice);
+
+        Long fakeId = r.getId() + 1;
+
+        mvc.perform(get("/api/pdf/invoice"+fakeId)).andExpect(status().isNotFound());
 
     }
 

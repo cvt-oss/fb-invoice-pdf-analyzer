@@ -5,9 +5,7 @@ import java.io.InputStream;
 
 import cz.cvt.pdf.model.Invoice;
 
-/**
- * InvoiceParserService
- */
+
 public interface InvoiceParserService {
 
     public Invoice parse (InputStream invoicePDFStream) throws IOException;

@@ -11,10 +11,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Invoice {
 
-  @OneToMany(cascade = CascadeType.ALL,mappedBy = "invoice")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoice")
+  @JsonManagedReference
   private List<InvoiceItem> invoiceItems = new ArrayList<InvoiceItem>();
 
   @Id
@@ -26,6 +31,26 @@ public class Invoice {
   private String totalPaid;
   private String paidOn;
   private String referentialNumber;
+  private String originalFileName;
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getOriginalFileName() {
+    return this.originalFileName;
+  }
+
+  public void setOriginalFileName(String originalFileName) {
+    this.originalFileName = originalFileName;
+  }
+
+  @Override
+  public String toString() {
+    return "{" + " invoiceItems='" + invoiceItems + "'" + ", id='" + id + "'" + ", accountId='" + accountId + "'"
+        + ", transactionId='" + transactionId + "'" + ", totalPaid='" + totalPaid + "'" + ", paidOn='" + paidOn + "'"
+        + ", referentialNumber='" + referentialNumber + "'" + ", originalFileName='" + originalFileName + "'" + "}";
+  }
 
   public void addInvoiceItem(InvoiceItem item) {
     invoiceItems.add(item);
@@ -102,15 +127,8 @@ public class Invoice {
     return Objects.hash(accountId, transactionId, referentialNumber);
   }
 
-  @Override
-  public String toString() {
-    return "{" + " invoiceItems='" + getInvoiceItems() + "'" + ", accountId='" + getAccountId() + "'"
-        + ", transactionId='" + getTransactionId() + "'" + ", totalPaid='" + getTotalPaid() + "'" + ", paidOn='"
-        + getPaidOn() + "'" + ", referentialNumber='" + getReferentialNumber() + "'" + "}";
+  public Long getId() {
+    return id;
   }
-
-public Long getId() {
-	return id;
-}
 
 }
