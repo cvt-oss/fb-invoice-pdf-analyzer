@@ -1,4 +1,4 @@
-This service parses and store Facebook invoice for campaings.
+This service parses and store Facebook invoice for campaigns.
 
 ### Installation:
 
@@ -48,12 +48,12 @@ Transfer-Encoding: chunked
     "id": 1,
     "invoiceItems": [
         {
-            "campaingName": "CampaingName1",
+            "campaignName": "CampaignName1",
             "id": 2,
             "price": "1 000,86 Kč"
         },
         {
-            "campaingName": "CampaingName2",
+            "campaignName": "CampaignName2",
             "id": 3,
             "price": "200,97 Kč"
         }
