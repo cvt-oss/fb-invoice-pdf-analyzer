@@ -2,6 +2,7 @@ package cz.cvt;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import cz.cvt.pdf.model.Invoice;
-import cz.cvt.pdf.service.api.InvoiceResponse;
+import cz.cvt.pdf.rest.InvoiceResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -46,8 +48,20 @@ public class IntegrationTest {
     @Autowired
     private MockMvc mvc;
 
+    private static ObjectMapper mapper;
+
+    @BeforeClass
+    public static void init() {
+
+        mapper = new ObjectMapper();
+        JavaTimeModule timeModule = new JavaTimeModule();
+        mapper.registerModule(timeModule);
+
+    }
+
     @Before
     public void setup() throws IOException {
+
         invoice = sampleInvoice();
         invoicePDF = samplePDFInvoice(PDF_NAME, invoice);
 
@@ -68,18 +82,16 @@ public class IntegrationTest {
 
         MvcResult postResult = mvc.perform(multipart("/api/pdf/invoice/process").file("invoice", pdfInvoice.getBytes()))
                 .andExpect(status().isOk()).andReturn();
-        InvoiceResponse r = new ObjectMapper().readValue(postResult.getResponse().getContentAsString(),
-                InvoiceResponse.class);
 
+        InvoiceResponse r = mapper.readValue(postResult.getResponse().getContentAsString(), InvoiceResponse.class);
 
         MvcResult getResult = mvc.perform(get("/api/pdf/invoice/" + r.getId())).andExpect(status().isOk()).andReturn();
-        Invoice returnedInvoice = new ObjectMapper().readValue(getResult.getResponse().getContentAsString(),
-                Invoice.class);
+        Invoice returnedInvoice = mapper.readValue(getResult.getResponse().getContentAsString(), Invoice.class);
         assertThat(returnedInvoice).isEqualTo(invoice);
 
         Long fakeId = r.getId() + 1;
 
-        mvc.perform(get("/api/pdf/invoice"+fakeId)).andExpect(status().isNotFound());
+        mvc.perform(get("/api/pdf/invoice" + fakeId)).andExpect(status().isNotFound());
 
     }
 

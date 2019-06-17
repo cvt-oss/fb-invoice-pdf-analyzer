@@ -2,6 +2,8 @@ package cz.cvt;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -29,7 +31,9 @@ public class TestUtils {
 
         Invoice invoice = new Invoice();
         invoice.setAccountId(randomString());
-        invoice.setPaidOn("1.1.1971 10:00");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FacebookParserServiceImpl.LOCAL_DATE_TIME_FORMAT);
+        LocalDateTime localDateTime = LocalDateTime.parse("19. 1. 2019 15:56", formatter);
+        invoice.setPaidOn(localDateTime);
         invoice.setReferentialNumber(randomString());
         invoice.setTotalPaid("100 CZK");
         invoice.setTransactionId(randomString());
@@ -60,7 +64,7 @@ public class TestUtils {
         // populate the invoice with valid attributes but fake values
         addLine(contents, FacebookParserServiceImpl.ACCOUNT_ID + invoice.getAccountId());
         addLine(contents, FacebookParserServiceImpl.PAID_ON);
-        addLine(contents, invoice.getPaidOn());
+        addLine(contents, invoice.getPaidOn().format(DateTimeFormatter.ofPattern(FacebookParserServiceImpl.LOCAL_DATE_TIME_FORMAT)));
         addLine(contents, FacebookParserServiceImpl.REFERENTIAL_NUMBER + invoice.getReferentialNumber());
         addLine(contents, FacebookParserServiceImpl.TRANSACTION_ID);
         addLine(contents, invoice.getTransactionId());

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +52,7 @@ public class FacebookParserServiceTest {
 
     @After
     public void cleanup() {
+
         invoicePDF.delete();
     }
 

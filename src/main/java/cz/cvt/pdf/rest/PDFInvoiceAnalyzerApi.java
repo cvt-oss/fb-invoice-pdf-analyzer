@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import cz.cvt.pdf.model.Invoice;
 import cz.cvt.pdf.persistence.InvoiceRepository;
 import cz.cvt.pdf.service.api.InvoiceParserService;
-import cz.cvt.pdf.service.api.InvoiceResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController

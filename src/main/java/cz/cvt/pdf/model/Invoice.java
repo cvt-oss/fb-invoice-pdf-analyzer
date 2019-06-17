@@ -1,5 +1,6 @@
 package cz.cvt.pdf.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +30,8 @@ public class Invoice {
   private String accountId;
   private String transactionId;
   private String totalPaid;
-  private String paidOn;
+
+  private LocalDateTime paidOn;
   private String referentialNumber;
   private String originalFileName;
 
@@ -43,13 +45,6 @@ public class Invoice {
 
   public void setOriginalFileName(String originalFileName) {
     this.originalFileName = originalFileName;
-  }
-
-  @Override
-  public String toString() {
-    return "{" + " invoiceItems='" + invoiceItems + "'" + ", id='" + id + "'" + ", accountId='" + accountId + "'"
-        + ", transactionId='" + transactionId + "'" + ", totalPaid='" + totalPaid + "'" + ", paidOn='" + paidOn + "'"
-        + ", referentialNumber='" + referentialNumber + "'" + ", originalFileName='" + originalFileName + "'" + "}";
   }
 
   public void addInvoiceItem(InvoiceItem item) {
@@ -86,11 +81,11 @@ public class Invoice {
     this.totalPaid = totalPaid;
   }
 
-  public String getPaidOn() {
+  public LocalDateTime getPaidOn() {
     return paidOn;
   }
 
-  public void setPaidOn(String paidOn) {
+  public void setPaidOn(LocalDateTime paidOn) {
     this.paidOn = paidOn;
   }
 
@@ -110,25 +105,40 @@ public class Invoice {
     this.referentialNumber = referentialNumber;
   }
 
+  public Long getId() {
+    return id;
+  }
+
   @Override
-  public boolean equals(Object o) {
-    if (o == this)
-      return true;
-    if (!(o instanceof Invoice)) {
-      return false;
-    }
-    Invoice invoice = (Invoice) o;
-    return Objects.equals(accountId, invoice.accountId) && Objects.equals(transactionId, invoice.transactionId)
-        && Objects.equals(referentialNumber, invoice.referentialNumber);
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Invoice)) {
+            return false;
+        }
+        Invoice invoice = (Invoice) o;
+        return Objects.equals(accountId, invoice.accountId) && Objects.equals(transactionId, invoice.transactionId) && Objects.equals(totalPaid, invoice.totalPaid) && Objects.equals(paidOn, invoice.paidOn) && Objects.equals(referentialNumber, invoice.referentialNumber);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(accountId, transactionId, referentialNumber);
+    return Objects.hash(accountId, transactionId, totalPaid, paidOn, referentialNumber);
   }
 
-  public Long getId() {
-    return id;
+
+  @Override
+  public String toString() {
+    return "{" +
+      " invoiceItems='" + getInvoiceItems() + "'" +
+      ", id='" + getId() + "'" +
+      ", accountId='" + getAccountId() + "'" +
+      ", transactionId='" + getTransactionId() + "'" +
+      ", totalPaid='" + getTotalPaid() + "'" +
+      ", paidOn='" + getPaidOn() + "'" +
+      ", referentialNumber='" + getReferentialNumber() + "'" +
+      ", originalFileName='" + getOriginalFileName() + "'" +
+      "}";
   }
+
 
 }

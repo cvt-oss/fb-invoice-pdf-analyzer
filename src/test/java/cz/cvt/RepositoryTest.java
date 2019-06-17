@@ -1,7 +1,6 @@
 package cz.cvt;
 
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +9,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import cz.cvt.pdf.model.Invoice;
-import cz.cvt.pdf.model.InvoiceItem;
 import cz.cvt.pdf.persistence.InvoiceRepository;
-import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -27,7 +25,7 @@ public class RepositoryTest {
 
     @Before
     public void setup() {
-        sampleInvoice = sampleInvoice();
+        sampleInvoice = TestUtils.sampleInvoice();
     }
 
     @Test
@@ -51,26 +49,6 @@ public class RepositoryTest {
 
         assertThat(found).isNotNull();
         assertThat(found).isEqualTo(sampleInvoice);
-    }
-
-    public static Invoice sampleInvoice() {
-
-        Invoice invoice = new Invoice();
-        invoice.setAccountId(randomString());
-        invoice.setPaidOn("1.1.1971 10:00");
-        invoice.setReferentialNumber(randomString());
-        invoice.setTotalPaid("100 CZK");
-        invoice.setTransactionId(randomString());
-
-        InvoiceItem item = new InvoiceItem(randomString(), "100 CZK");
-        invoice.addInvoiceItem(item);
-
-        return invoice;
-
-    }
-
-    public static String randomString() {
-        return UUID.randomUUID().toString();
     }
 
 }

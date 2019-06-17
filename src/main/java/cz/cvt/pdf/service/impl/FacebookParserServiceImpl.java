@@ -2,6 +2,8 @@ package cz.cvt.pdf.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
     public static final String AMOUNT_PAID = "Placeno";
     public static final String REFERENTIAL_NUMBER = "Referenční číslo: ";
     public static final String ACCOUNT_ID = "ID účtu: ";
+    public static final String LOCAL_DATE_TIME_FORMAT = "d. M. yyyy HH:mm";
 
     public Invoice parse(InputStream is) throws IOException {
         PDFTextStripper stripper = new PDFTextStripper();
@@ -97,7 +100,10 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
             }
 
             else if (line.startsWith(PAID_ON)) {
-                invoice.setPaidOn(metadataLines.get(i + 1));
+                String rawTimeString = metadataLines.get(i + 1);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT);
+                LocalDateTime localDateTime = LocalDateTime.parse(rawTimeString, formatter);
+                invoice.setPaidOn(localDateTime);
             }
 
             else if (line.startsWith(TRANSACTION_ID)) {

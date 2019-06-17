@@ -1,4 +1,4 @@
-package cz.cvt.pdf.service.api;
+package cz.cvt.pdf.rest;
 
 import java.util.Objects;
 
