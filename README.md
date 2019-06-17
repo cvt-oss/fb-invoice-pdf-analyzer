@@ -50,18 +50,18 @@ Transfer-Encoding: chunked
         {
             "campaignName": "CampaignName1",
             "id": 2,
-            "price": "1 000,86 Kč"
+            "price": "43.17"
         },
         {
             "campaignName": "CampaignName2",
             "id": 3,
-            "price": "200,97 Kč"
+            "price": "366.83"
         }
     ],
     "originalFileName": "invoice.pdf",
     "paidOn": "2019-01-19T15:56:00",
     "referentialNumber": "sampleRefNumber",
-    "totalPaid": "100,00 Kč (CZK)",
+    "totalPaid": "36000.0",
     "transactionId": "sampleTransactionId"
 }
 ```
