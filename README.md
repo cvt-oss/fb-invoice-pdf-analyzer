@@ -85,3 +85,5 @@ If you want to clear database content as well:
 ```
 docker-compose down --volumes
 ```
+
+Application health can be determined via `/actuator/health` endpoint and info can be retrieved via `/actuator/info`
