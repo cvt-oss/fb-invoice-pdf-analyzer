@@ -4,7 +4,7 @@ This service parses and store Facebook invoice for campaigns.
 
  - Build the source:
  ```
- $ mvn clean package
+ mvn clean package
  ```
  - Start the application:
  ```
@@ -68,7 +68,7 @@ Transfer-Encoding: chunked
 
 - If non existent invoice is being retrieved, 404 is returned:
 ```
-$ http http://localhost:8080/api/pdf/invoice/2
+http http://localhost:8080/api/pdf/invoice/2
 
 HTTP/1.1 404
 Content-Length: 0
