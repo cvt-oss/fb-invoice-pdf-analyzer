@@ -59,7 +59,7 @@ Transfer-Encoding: chunked
         }
     ],
     "originalFileName": "invoice.pdf",
-    "paidOn": "19. 1. 2019 15:56",
+    "paidOn": "2019-01-19T15:56:00",
     "referentialNumber": "sampleRefNumber",
     "totalPaid": "100,00 Kč (CZK)",
     "transactionId": "sampleTransactionId"
