@@ -3,18 +3,19 @@ package cz.cvt;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import cz.cvt.pdf.model.Invoice;
 import cz.cvt.pdf.rest.InvoiceResponse;
@@ -50,13 +51,15 @@ public class IntegrationTest {
 
     private static ObjectMapper mapper;
 
+    @ClassRule
+    public static PostgreSQLContainer postgreSQLContainer = TestPostgresSQLContainer.getInstance();
+
     @BeforeClass
     public static void init() {
 
         mapper = new ObjectMapper();
         JavaTimeModule timeModule = new JavaTimeModule();
         mapper.registerModule(timeModule);
-
     }
 
     @Before

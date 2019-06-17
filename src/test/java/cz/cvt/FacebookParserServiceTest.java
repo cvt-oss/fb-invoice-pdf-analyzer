@@ -13,7 +13,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import cz.cvt.pdf.model.Invoice;
 import cz.cvt.pdf.service.api.InvoiceParserService;
 import cz.cvt.pdf.service.impl.FacebookParserServiceImpl;
@@ -23,9 +25,10 @@ import static cz.cvt.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
 @Slf4j
 public class FacebookParserServiceTest {
-
+ 
     private static final String PDF_NAME = "test.pdf";
 
     @Autowired
@@ -35,7 +38,7 @@ public class FacebookParserServiceTest {
     private Invoice invoice;
 
     @TestConfiguration
-    static class FacebookParserServiceTestConfiguration {
+     static class FacebookParserServiceTestConfiguration {
 
         @Bean
         public InvoiceParserService employeeService() {

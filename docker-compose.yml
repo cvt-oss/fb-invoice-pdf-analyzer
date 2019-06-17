@@ -4,7 +4,7 @@ version: "3.7"
 services:
   psql:
     container_name: "postgresql-container"
-    image: "postgres"
+    image: "postgres:11.3"
     ports:
       - "5432:5432"
     volumes:
