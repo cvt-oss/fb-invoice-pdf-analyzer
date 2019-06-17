@@ -35,13 +35,13 @@ public class TestUtils {
         LocalDateTime localDateTime = LocalDateTime.parse("19. 1. 2019 15:56", formatter);
         invoice.setPaidOn(localDateTime);
         invoice.setReferentialNumber(randomString());
-        invoice.setTotalPaid("100 CZK");
+        invoice.setTotalPaid(new Double(36000.00));
         invoice.setTransactionId(randomString());
 
-        InvoiceItem item = new InvoiceItem(randomString(), "100 CZK");
+        InvoiceItem item = new InvoiceItem(randomString(), new Double(1950.86));
         invoice.addInvoiceItem(item);
 
-        InvoiceItem item2 = new InvoiceItem(randomString(), "200 CZK");
+        InvoiceItem item2 = new InvoiceItem(randomString(), new Double(257.97));
         invoice.addInvoiceItem(item2);
 
         return invoice;
@@ -69,7 +69,7 @@ public class TestUtils {
         addLine(contents, FacebookParserServiceImpl.TRANSACTION_ID);
         addLine(contents, invoice.getTransactionId());
         addLine(contents, FacebookParserServiceImpl.AMOUNT_PAID);
-        addLine(contents, invoice.getTotalPaid());
+        addLine(contents, extractStringPrice(invoice.getTotalPaid()));
         addLine(contents, FacebookParserServiceImpl.METADATA_END_DELIMITER);
 
         invoice.getInvoiceItems().forEach(item -> {
@@ -77,7 +77,7 @@ public class TestUtils {
             try {
                 addLine(contents, item.getCampaignName());
                 addLine(contents, SAMPLE_DATE);
-                addLine(contents, item.getPrice());
+                addLine(contents, extractStringPrice(item.getPrice()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -97,5 +97,12 @@ public class TestUtils {
 
         stream.showText(content);
         stream.newLine();
+    }
+
+    public static String extractStringPrice(Double price) {
+
+        String tmp = String.valueOf(price);
+        tmp = tmp.replace(".", ",");
+        return tmp + " Kč";
     }
 }

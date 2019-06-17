@@ -29,7 +29,7 @@ public class Invoice {
 
   private String accountId;
   private String transactionId;
-  private String totalPaid;
+  private Double totalPaid;
 
   private LocalDateTime paidOn;
   private String referentialNumber;
@@ -73,11 +73,11 @@ public class Invoice {
     this.transactionId = transactionId;
   }
 
-  public String getTotalPaid() {
+  public Double getTotalPaid() {
     return totalPaid;
   }
 
-  public void setTotalPaid(String totalPaid) {
+  public void setTotalPaid(Double totalPaid) {
     this.totalPaid = totalPaid;
   }
 

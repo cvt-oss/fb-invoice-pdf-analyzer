@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 public class InvoiceItem {
 
-  String campaignName;
-  String price;
+  private String campaignName;
+  private Double price;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,7 +36,7 @@ public class InvoiceItem {
   public InvoiceItem() {
   }
 
-  public InvoiceItem(String campaignName, String price) {
+  public InvoiceItem(String campaignName, Double price) {
 
     this.campaignName = campaignName;
     this.price = price;
@@ -50,11 +50,11 @@ public class InvoiceItem {
     this.campaignName = campaignName;
   }
 
-  public String getPrice() {
+  public Double getPrice() {
     return price;
   }
 
-  public void setPrice(String price) {
+  public void setPrice(Double price) {
     this.price = price;
   }
 

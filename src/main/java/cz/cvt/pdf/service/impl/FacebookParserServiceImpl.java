@@ -63,14 +63,14 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
                 String campaignName = current.trim();
                 String totalPrice = next.split("\\n")[1];
 
-                item = new InvoiceItem(campaignName, totalPrice);
+                item = new InvoiceItem(campaignName, extractPrice(totalPrice));
                 log.debug("invoice item found: \n {}", item);
 
             } else {
                 String[] tmp = current.split("\n");
                 String campaignName = tmp[tmp.length - 1];
                 String totalPrice = next.split("\n")[1];
-                item = new InvoiceItem(campaignName, totalPrice);
+                item = new InvoiceItem(campaignName, extractPrice(totalPrice));
                 log.debug("invoice item found: \n {}", item);
 
             }
@@ -109,11 +109,23 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
             else if (line.startsWith(TRANSACTION_ID)) {
                 invoice.setTransactionId(metadataLines.get(i + 1));
             } else if (line.startsWith(AMOUNT_PAID)) {
-                invoice.setTotalPaid(metadataLines.get(i + 1));
+
+                String rawPrice = metadataLines.get(i + 1);
+                invoice.setTotalPaid(extractPrice(rawPrice));
             }
         }
 
         return invoice;
+    }
+
+    public Double extractPrice(String price) {
+
+        String[] split = price.split(",");
+        String intPart = split[0];
+        String fractionalPart = split[1].substring(0, 2); // we only care about the first two numbers afer comma
+        String finalStringPrice = intPart.trim() + "." + fractionalPart.trim();
+        
+        return Double.valueOf(finalStringPrice.replace(" ", ""));
     }
 
 }
