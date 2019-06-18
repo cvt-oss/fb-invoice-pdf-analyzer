@@ -50,12 +50,14 @@ Transfer-Encoding: chunked
         {
             "campaignName": "CampaignName1",
             "id": 2,
-            "price": "43.17"
+            "price": "43.17",
+            "prefix": "Příspěvek: "
         },
         {
             "campaignName": "CampaignName2",
             "id": 3,
-            "price": "366.83"
+            "price": "366.83",
+            "prefix": "Událost: "
         }
     ],
     "originalFileName": "invoice.pdf",
