@@ -90,4 +90,4 @@ docker-compose down --volumes
 
 Application health can be determined via `/actuator/health` endpoint and info can be retrieved via `/actuator/info`
 
-Swagger documentation is available at `/swagger-ui.html`
+If env property `SPRING_PROFILES_ACTIVE` contains `swagger` then swagger documentation is available at `/swagger-ui.html`
