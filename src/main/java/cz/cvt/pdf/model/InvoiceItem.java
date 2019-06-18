@@ -1,5 +1,7 @@
 package cz.cvt.pdf.model;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,10 +14,11 @@ import javax.persistence.SequenceGenerator;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@SequenceGenerator(name = "invoiceItemIdSeq", sequenceName = "INVOICE_ITEM_SEQUENCE", initialValue = 1,allocationSize = 1)
+@SequenceGenerator(name = "invoiceItemIdSeq", sequenceName = "INVOICE_ITEM_SEQUENCE", initialValue = 1, allocationSize = 1)
 public class InvoiceItem {
 
   private String campaignName;
+
   private Double price;
   private String prefix;
 
@@ -65,6 +68,23 @@ public class InvoiceItem {
   @Override
   public String toString() {
     return "InvoiceItem [campaignName=" + campaignName + ", price=" + price + ", prefix=" + prefix + "]";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof InvoiceItem)) {
+      return false;
+    }
+    InvoiceItem invoiceItem = (InvoiceItem) o;
+    return Objects.equals(campaignName, invoiceItem.campaignName) && Objects.equals(price, invoiceItem.price)
+        && Objects.equals(prefix, invoiceItem.prefix);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(campaignName, price, prefix);
   }
 
   public Long getId() {
