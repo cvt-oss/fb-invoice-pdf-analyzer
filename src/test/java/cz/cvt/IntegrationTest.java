@@ -98,4 +98,10 @@ public class IntegrationTest {
 
     }
 
+    @Test
+    public void swaggerDevTest() throws Exception {
+        mvc.perform(get("/swagger-ui.html#/pdf-invoice-analyzer-api")).andExpect(status().isOk());
+
+    }
+
 }
