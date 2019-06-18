@@ -12,16 +12,14 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-CREATE SEQUENCE public.hibernate_sequence
+CREATE SEQUENCE public.INVOICE_SEQUENCE
     START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+    INCREMENT BY 1;
 
-SET default_tablespace = '';
+CREATE SEQUENCE public.INVOICE_ITEM_SEQUENCE
+   START WITH 1
+   INCREMENT BY 1;
 
-SET default_with_oids = false;
 
 CREATE TABLE public.invoice (
     id bigint NOT NULL,
@@ -36,6 +34,7 @@ CREATE TABLE public.invoice (
 CREATE TABLE public.invoice_item (
     id bigint NOT NULL,
     campaign_name character varying(1024),
+    prefix character varying(16),
     price double precision,
     invoice_id bigint
 );

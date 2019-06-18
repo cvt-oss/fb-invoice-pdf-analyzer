@@ -11,12 +11,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@SequenceGenerator(name = "invoiceIdSeq", sequenceName = "INVOICE_SEQUENCE", initialValue = 1,allocationSize = 1)
+
 public class Invoice {
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoice")
@@ -24,7 +27,7 @@ public class Invoice {
   private List<InvoiceItem> invoiceItems = new ArrayList<InvoiceItem>();
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoiceIdSeq")
   private Long id;
 
   private String accountId;
@@ -110,14 +113,16 @@ public class Invoice {
   }
 
   @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Invoice)) {
-            return false;
-        }
-        Invoice invoice = (Invoice) o;
-        return Objects.equals(accountId, invoice.accountId) && Objects.equals(transactionId, invoice.transactionId) && Objects.equals(totalPaid, invoice.totalPaid) && Objects.equals(paidOn, invoice.paidOn) && Objects.equals(referentialNumber, invoice.referentialNumber);
+  public boolean equals(Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof Invoice)) {
+      return false;
+    }
+    Invoice invoice = (Invoice) o;
+    return Objects.equals(accountId, invoice.accountId) && Objects.equals(transactionId, invoice.transactionId)
+        && Objects.equals(totalPaid, invoice.totalPaid) && Objects.equals(paidOn, invoice.paidOn)
+        && Objects.equals(referentialNumber, invoice.referentialNumber);
   }
 
   @Override
@@ -125,20 +130,12 @@ public class Invoice {
     return Objects.hash(accountId, transactionId, totalPaid, paidOn, referentialNumber);
   }
 
-
   @Override
   public String toString() {
-    return "{" +
-      " invoiceItems='" + getInvoiceItems() + "'" +
-      ", id='" + getId() + "'" +
-      ", accountId='" + getAccountId() + "'" +
-      ", transactionId='" + getTransactionId() + "'" +
-      ", totalPaid='" + getTotalPaid() + "'" +
-      ", paidOn='" + getPaidOn() + "'" +
-      ", referentialNumber='" + getReferentialNumber() + "'" +
-      ", originalFileName='" + getOriginalFileName() + "'" +
-      "}";
+    return "{" + " invoiceItems='" + getInvoiceItems() + "'" + ", id='" + getId() + "'" + ", accountId='"
+        + getAccountId() + "'" + ", transactionId='" + getTransactionId() + "'" + ", totalPaid='" + getTotalPaid() + "'"
+        + ", paidOn='" + getPaidOn() + "'" + ", referentialNumber='" + getReferentialNumber() + "'"
+        + ", originalFileName='" + getOriginalFileName() + "'" + "}";
   }
-
 
 }

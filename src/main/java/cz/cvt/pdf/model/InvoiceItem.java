@@ -7,23 +7,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
+@SequenceGenerator(name = "invoiceItemIdSeq", sequenceName = "INVOICE_ITEM_SEQUENCE", initialValue = 1,allocationSize = 1)
 public class InvoiceItem {
 
   private String campaignName;
   private Double price;
+  private String prefix;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoiceItemIdSeq")
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn
   @JsonBackReference
-    private Invoice invoice;
+  private Invoice invoice;
 
   public Invoice getInvoice() {
     return this.invoice;
@@ -36,10 +39,11 @@ public class InvoiceItem {
   public InvoiceItem() {
   }
 
-  public InvoiceItem(String campaignName, Double price) {
+  public InvoiceItem(String campaignName, Double price, String prefix) {
 
     this.campaignName = campaignName;
     this.price = price;
+    this.prefix = prefix;
   }
 
   public String getCampaignName() {
@@ -60,11 +64,19 @@ public class InvoiceItem {
 
   @Override
   public String toString() {
-    return "InvoiceItem [campaignName=" + campaignName + ", price=" + price + "]";
+    return "InvoiceItem [campaignName=" + campaignName + ", price=" + price + ", prefix=" + prefix + "]";
   }
 
   public Long getId() {
     return id;
+  }
+
+  public String getPrefix() {
+    return this.prefix;
+  }
+
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
   }
 
 }

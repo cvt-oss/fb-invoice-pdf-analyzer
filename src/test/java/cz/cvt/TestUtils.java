@@ -22,7 +22,6 @@ public class TestUtils {
     private static final String SAMPLE_DATE = "Od 30. 12. 2018 13:00 do 19. 1. 2019 15:56";
     public static final String PDF_NAME = "test.pdf";
 
-
     public static String randomString() {
         return UUID.randomUUID().toString();
     }
@@ -38,10 +37,10 @@ public class TestUtils {
         invoice.setTotalPaid(new Double(36000.00));
         invoice.setTransactionId(randomString());
 
-        InvoiceItem item = new InvoiceItem(randomString(), new Double(1950.86));
+        InvoiceItem item = new InvoiceItem(randomString(), new Double(1950.86), FacebookParserServiceImpl.EVENT_PREFIX);
         invoice.addInvoiceItem(item);
 
-        InvoiceItem item2 = new InvoiceItem(randomString(), new Double(257.97));
+        InvoiceItem item2 = new InvoiceItem(randomString(), new Double(257.97), FacebookParserServiceImpl.POST_PREFIX);
         invoice.addInvoiceItem(item2);
 
         return invoice;
@@ -64,7 +63,8 @@ public class TestUtils {
         // populate the invoice with valid attributes but fake values
         addLine(contents, FacebookParserServiceImpl.ACCOUNT_ID + invoice.getAccountId());
         addLine(contents, FacebookParserServiceImpl.PAID_ON);
-        addLine(contents, invoice.getPaidOn().format(DateTimeFormatter.ofPattern(FacebookParserServiceImpl.LOCAL_DATE_TIME_FORMAT)));
+        addLine(contents, invoice.getPaidOn()
+                .format(DateTimeFormatter.ofPattern(FacebookParserServiceImpl.LOCAL_DATE_TIME_FORMAT)));
         addLine(contents, FacebookParserServiceImpl.REFERENTIAL_NUMBER + invoice.getReferentialNumber());
         addLine(contents, FacebookParserServiceImpl.TRANSACTION_ID);
         addLine(contents, invoice.getTransactionId());
