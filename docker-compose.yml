@@ -33,6 +33,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://psql:5432/${POSTGRES_DB}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_PROFILES_ACTIVE
 
 volumes:
   psql-data:

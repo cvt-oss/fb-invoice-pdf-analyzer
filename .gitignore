@@ -21,6 +21,7 @@
 .springBeans
 /build
 /code
+redeploy.sh
 MANIFEST.MF
 _site/
 activemq-data
