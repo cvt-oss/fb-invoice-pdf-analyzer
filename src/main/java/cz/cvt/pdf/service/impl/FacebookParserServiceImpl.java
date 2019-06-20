@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -127,11 +128,21 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
             } else if (line.startsWith(AMOUNT_PAID)) {
 
                 String rawPrice = metadataLines.get(i + 1);
+
                 invoice.setTotalPaid(extractPrice(rawPrice));
+                invoice.setCurrency(extractCurrency(rawPrice));
             }
         }
 
         return invoice;
+    }
+
+    public Currency extractCurrency(String price) {
+        String trimmedCurrency = price.substring(price.length() - 5);
+        trimmedCurrency = trimmedCurrency.replace("(", "");
+        trimmedCurrency = trimmedCurrency.replace(")", "");
+
+        return Currency.getInstance(trimmedCurrency);
     }
 
     public Double extractPrice(String price) {

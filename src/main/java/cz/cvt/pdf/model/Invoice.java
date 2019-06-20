@@ -2,6 +2,7 @@ package cz.cvt.pdf.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-@SequenceGenerator(name = "invoiceIdSeq", sequenceName = "INVOICE_SEQUENCE", initialValue = 1,allocationSize = 1)
+@SequenceGenerator(name = "invoiceIdSeq", sequenceName = "INVOICE_SEQUENCE", initialValue = 1, allocationSize = 1)
 
 public class Invoice {
 
@@ -33,6 +34,7 @@ public class Invoice {
   private String accountId;
   private String transactionId;
   private Double totalPaid;
+  private Currency currency;
 
   private LocalDateTime paidOn;
   private String referentialNumber;
@@ -122,12 +124,12 @@ public class Invoice {
     Invoice invoice = (Invoice) o;
     return Objects.equals(accountId, invoice.accountId) && Objects.equals(transactionId, invoice.transactionId)
         && Objects.equals(totalPaid, invoice.totalPaid) && Objects.equals(paidOn, invoice.paidOn)
-        && Objects.equals(referentialNumber, invoice.referentialNumber);
+        && Objects.equals(referentialNumber, invoice.referentialNumber) && Objects.equals(currency, invoice.currency);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(accountId, transactionId, totalPaid, paidOn, referentialNumber);
+    return Objects.hash(accountId, transactionId, totalPaid, paidOn, referentialNumber, currency);
   }
 
   @Override
@@ -135,7 +137,15 @@ public class Invoice {
     return "{" + " invoiceItems='" + getInvoiceItems() + "'" + ", id='" + getId() + "'" + ", accountId='"
         + getAccountId() + "'" + ", transactionId='" + getTransactionId() + "'" + ", totalPaid='" + getTotalPaid() + "'"
         + ", paidOn='" + getPaidOn() + "'" + ", referentialNumber='" + getReferentialNumber() + "'"
-        + ", originalFileName='" + getOriginalFileName() + "'" + "}";
+        + ", originalFileName='" + getOriginalFileName() + "'" + ", currency='" + getCurrency() + "'" + "}";
+  }
+
+  public Currency getCurrency() {
+    return this.currency;
+  }
+
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
   }
 
 }

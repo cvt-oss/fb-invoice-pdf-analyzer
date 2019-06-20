@@ -27,6 +27,7 @@ CREATE TABLE public.invoice (
     original_file_name character varying(255),
     paid_on timestamp without time zone,
     referential_number character varying(255),
+    currency character varying(4),
     total_paid double precision,
     transaction_id character varying(255)
 );
