@@ -109,7 +109,7 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
             if (item != null)
                 invoice.addInvoiceItem(item);
         }
-
+        doc.close();
         return invoice;
     }
 
