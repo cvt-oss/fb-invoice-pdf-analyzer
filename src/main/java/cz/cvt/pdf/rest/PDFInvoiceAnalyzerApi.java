@@ -1,85 +1,50 @@
 package cz.cvt.pdf.rest;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import cz.cvt.pdf.model.Invoice;
-import cz.cvt.pdf.persistence.InvoiceRepository;
 import cz.cvt.pdf.service.api.InvoiceParserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
 
-@RestController
-@RequestMapping("/api/pdf")
-@Slf4j
-@Transactional
-@Api(value = "Facebook PDF Invoice REST API", description = "Operations related to PDF invoices (processing, retrieving)")
+@Path("/api/pdf")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.MULTIPART_FORM_DATA)
 public class PDFInvoiceAnalyzerApi {
 
-    @Autowired
-    private InvoiceParserService pdfService;
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+    @Inject
+    InvoiceParserService pdfService;
 
-    Logger logger = LoggerFactory.getLogger(PDFInvoiceAnalyzerApi.class);
+    private static final Logger log = Logger.getLogger(PDFInvoiceAnalyzerApi.class);
 
-    @PostMapping(path="/invoice/process")@ApiOperation(value="Parse and store Facebook PDF invoice",response=List.class)
+    @POST
+    @Path("/invoice/process")
+    @Transactional
 
-    @ApiResponses(value={
-        @ApiResponse(code=200,message="Invoice processed succsesfully",response = InvoiceResponse.class),
-        @ApiResponse(code=400,message="Bad Request")
-    })
+    public Response processInvoice(@MultipartForm FormData formData) throws IOException {
 
-    public ResponseEntity<InvoiceResponse> processInvoice(@ApiParam(required = true, value = "Valid Facebook PDF invoice in Czech Language")@RequestParam("invoice") MultipartFile invoiceFile) {
+        File file = formData.getPdfFile();
+        InputStream is = new FileInputStream(file);
+        Invoice invoice = pdfService.parse(is);
+        invoice.originalFileName = file.getName();
+        invoice.persist();
+        file.delete();
 
-        try {
-            InputStream is = invoiceFile.getInputStream();
-            Invoice invoice = pdfService.parse(is);
-            invoice.setOriginalFileName(invoiceFile.getOriginalFilename());
-            invoiceRepository.save(invoice);
-            return ResponseEntity.ok().body(new InvoiceResponse(invoice.getId()));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @GetMapping("/invoice/{id}")
-    @ApiResponses(value={
-        @ApiResponse(code=200,message="Invoice retrieved successfully}", response = Invoice.class),
-        @ApiResponse(code=404,message = "Invoice not found")
-    })
-    public ResponseEntity<Invoice> getInvoiceById(@ApiParam(required = true, value = "Invoice ID")@PathVariable("id") Long id) {
-
-        try {
-            Invoice invoice = invoiceRepository.getOne(id);
-            log.debug("found result:" + invoice);
-            return ResponseEntity.ok().body(invoice);
-        } catch (javax.persistence.EntityNotFoundException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        }
+        return Response.ok(new InvoiceResponse(invoice.id)).build();
     }
 
 }

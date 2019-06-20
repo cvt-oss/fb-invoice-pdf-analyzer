@@ -8,18 +8,20 @@ import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.stereotype.Service;
+import org.jboss.logging.Logger;
 
 import cz.cvt.pdf.model.Invoice;
 import cz.cvt.pdf.model.InvoiceItem;
 import cz.cvt.pdf.service.api.InvoiceParserService;
-import lombok.extern.slf4j.Slf4j;
 
-@Service
-@Slf4j
+@ApplicationScoped
 public class FacebookParserServiceImpl implements InvoiceParserService {
+
+    private static final Logger log = Logger.getLogger(FacebookParserServiceImpl.class);
 
     public FacebookParserServiceImpl() {
     }
@@ -43,11 +45,12 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
         PDFTextStripper stripper = new PDFTextStripper();
         PDDocument doc = PDDocument.load(is);
         String invoiceText = stripper.getText(doc);
-        log.debug("invoice text extracted :\n {} ", invoiceText);
+
+        log.debugf("invoice text extracted :\n %s ", invoiceText);
         String metadata = invoiceText.substring(0, invoiceText.indexOf(METADATA_END_DELIMITER));
 
         Invoice invoice = extractMetadata(metadata);
-        log.debug("invoice metadata extracted :\n {}", invoice.toString());
+        log.debugf("invoice metadata extracted :\n %s", invoice.toString());
 
         String invoiceItems = invoiceText.substring(
                 invoiceText.indexOf(METADATA_END_DELIMITER) + METADATA_END_DELIMITER.length(),
@@ -82,7 +85,7 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
                 String totalPrice = next.split("\\n")[1];
 
                 item = new InvoiceItem(campaignName, extractPrice(totalPrice), prefix);
-                log.debug("invoice item found: \n {}", item);
+                log.debugf("invoice item found: \n %s", item);
 
             } else {
                 String[] tmp = current.split("\n");
@@ -102,13 +105,14 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
                 }
 
                 item = new InvoiceItem(campaignName, extractPrice(totalPrice), prefix);
-                log.debug("invoice item found: \n {}", item);
+                log.debugf("invoice item found: \n %s", item);
 
             }
 
             if (item != null)
                 invoice.addInvoiceItem(item);
         }
+        doc.close();
 
         return invoice;
     }
@@ -123,28 +127,28 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
             String line = metadataLines.get(i);
 
             if (line.startsWith(ACCOUNT_ID)) {
-                invoice.setAccountId(line.replace(ACCOUNT_ID, ""));
+                invoice.accountId = line.replace(ACCOUNT_ID, "");
             }
 
             else if (line.startsWith(REFERENTIAL_NUMBER)) {
-                invoice.setReferentialNumber(line.replace(REFERENTIAL_NUMBER, ""));
+                invoice.referentialNumber = line.replace(REFERENTIAL_NUMBER, "");
             }
 
             else if (line.startsWith(PAID_ON)) {
                 String rawTimeString = metadataLines.get(i + 1);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_FORMAT);
                 LocalDateTime localDateTime = LocalDateTime.parse(rawTimeString, formatter);
-                invoice.setPaidOn(localDateTime);
+                invoice.paidOn = localDateTime;
             }
 
             else if (line.startsWith(TRANSACTION_ID)) {
-                invoice.setTransactionId(metadataLines.get(i + 1));
+                invoice.transactionId = metadataLines.get(i + 1);
             } else if (line.startsWith(AMOUNT_PAID)) {
 
                 String rawPrice = metadataLines.get(i + 1);
 
-                invoice.setTotalPaid(extractPrice(rawPrice));
-                invoice.setCurrency(extractCurrency(rawPrice));
+                invoice.totalPaid = extractPrice(rawPrice);
+                invoice.currency = extractCurrency(rawPrice);
             }
         }
 
@@ -190,7 +194,7 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
 
     public String processPrefix(String campaignName) {
 
-        log.debug("Processing prefix: {}", campaignName);
+        log.debugf("Processing prefix: %s", campaignName);
         if (campaignName.startsWith(CZ_EVENT_PREFIX)) {
             return CZ_EVENT_PREFIX;
         } else if (campaignName.startsWith(CZ_POST_PREFIX)) {

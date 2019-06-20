@@ -11,13 +11,15 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.jboss.logging.Logger;
+
 import cz.cvt.pdf.model.Invoice;
 import cz.cvt.pdf.model.InvoiceItem;
 import cz.cvt.pdf.service.impl.FacebookParserServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class TestUtils {
+
+    private static final Logger log = Logger.getLogger(TestUtils.class);
 
     private static final String FONT_LOCATION = "LiberationSans-Regular.ttf";
     private static final String SAMPLE_DATE = "Od 30. 12. 2018 13:00 do 19. 1. 2019 15:56";
@@ -30,19 +32,21 @@ public class TestUtils {
     public static Invoice sampleInvoice() {
 
         Invoice invoice = new Invoice();
-        invoice.setAccountId(randomString());
+        invoice.accountId = randomString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FacebookParserServiceImpl.LOCAL_DATE_TIME_FORMAT);
         LocalDateTime localDateTime = LocalDateTime.parse("19. 1. 2019 15:56", formatter);
-        invoice.setPaidOn(localDateTime);
-        invoice.setReferentialNumber(randomString());
-        invoice.setTotalPaid(new Double(36000.00));
-        invoice.setTransactionId(randomString());
-        invoice.setCurrency(Currency.getInstance("CZK"));
+        invoice.paidOn = localDateTime;
+        invoice.referentialNumber = randomString();
+        invoice.totalPaid = new Double(36000.00);
+        invoice.transactionId = randomString();
+        invoice.currency = Currency.getInstance("CZK");
 
-        InvoiceItem item = new InvoiceItem(randomString(), new Double(1950.86), FacebookParserServiceImpl.CZ_EVENT_PREFIX);
+        InvoiceItem item = new InvoiceItem(randomString(), new Double(1950.86),
+                FacebookParserServiceImpl.CZ_EVENT_PREFIX);
         invoice.addInvoiceItem(item);
 
-        InvoiceItem item2 = new InvoiceItem(randomString(), new Double(257.97), FacebookParserServiceImpl.CZ_POST_PREFIX);
+        InvoiceItem item2 = new InvoiceItem(randomString(), new Double(257.97),
+                FacebookParserServiceImpl.CZ_POST_PREFIX);
         invoice.addInvoiceItem(item2);
 
         return invoice;
@@ -63,24 +67,24 @@ public class TestUtils {
         contents.newLineAtOffset(50, 600);
 
         // populate the invoice with valid attributes but fake values
-        addLine(contents, FacebookParserServiceImpl.ACCOUNT_ID + invoice.getAccountId());
+        addLine(contents, FacebookParserServiceImpl.ACCOUNT_ID + invoice.accountId);
         addLine(contents, FacebookParserServiceImpl.PAID_ON);
-        addLine(contents, invoice.getPaidOn()
+        addLine(contents, invoice.paidOn
                 .format(DateTimeFormatter.ofPattern(FacebookParserServiceImpl.LOCAL_DATE_TIME_FORMAT)));
-        addLine(contents, FacebookParserServiceImpl.REFERENTIAL_NUMBER + invoice.getReferentialNumber());
+        addLine(contents, FacebookParserServiceImpl.REFERENTIAL_NUMBER + invoice.referentialNumber);
         addLine(contents, FacebookParserServiceImpl.TRANSACTION_ID);
-        addLine(contents, invoice.getTransactionId());
+        addLine(contents, invoice.transactionId);
         addLine(contents,
                 FacebookParserServiceImpl.AMOUNT_PAID);
-        addLine(contents, extractStringPrice(invoice.getTotalPaid())+ " (" + Currency.getInstance("CZK").getCurrencyCode() + ")");
+        addLine(contents, extractStringPrice(invoice.totalPaid)+ " (" + Currency.getInstance("CZK").getCurrencyCode() + ")");
         addLine(contents, FacebookParserServiceImpl.METADATA_END_DELIMITER);
 
-        invoice.getInvoiceItems().forEach(item -> {
+        invoice.invoiceItems.forEach(item -> {
 
             try {
-                addLine(contents, item.getCampaignName());
+                addLine(contents, item.campaignName);
                 addLine(contents, SAMPLE_DATE);
-                addLine(contents, extractStringPrice(item.getPrice()));
+                addLine(contents, extractStringPrice(item.price));
             } catch (IOException e) {
                 e.printStackTrace();
             }
