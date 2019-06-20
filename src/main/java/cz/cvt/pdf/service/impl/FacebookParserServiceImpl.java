@@ -35,8 +35,9 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
     public static final String REFERENTIAL_NUMBER = "Referenční číslo: ";
     public static final String ACCOUNT_ID = "ID účtu: ";
     public static final String LOCAL_DATE_TIME_FORMAT = "d. M. yyyy HH:mm";
-    public static final String POST_PREFIX = "Příspěvek: ";
-    public static final String EVENT_PREFIX = "Událost: ";
+    public static final String CZ_POST_PREFIX = "Příspěvek: ";
+    public static final String CZ_EVENT_PREFIX = "Událost: ";
+    public static final String EN_POST_PREFIX = "Post: ";
 
     public Invoice parse(InputStream is) throws IOException {
         PDFTextStripper stripper = new PDFTextStripper();
@@ -65,10 +66,17 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
 
                 String campaignName = current.trim();
                 String prefix = processPrefix(campaignName);
-                if (prefix.equals(EVENT_PREFIX)) {
-                    campaignName = campaignName.replace(EVENT_PREFIX, "");
-                } else if (prefix.equals(POST_PREFIX)) {
-                    campaignName = removePostPrefix(campaignName);
+
+                switch (prefix) {
+                case CZ_EVENT_PREFIX:
+                    campaignName = campaignName.replace(CZ_EVENT_PREFIX, "");
+                    break;
+                case CZ_POST_PREFIX:
+                case EN_POST_PREFIX:
+                    campaignName = removePostPrefix(campaignName, prefix);
+                    break;
+                default:
+                    break;
                 }
 
                 String totalPrice = next.split("\\n")[1];
@@ -81,10 +89,16 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
                 String campaignName = tmp[tmp.length - 1];
                 String totalPrice = next.split("\n")[1];
                 String prefix = processPrefix(campaignName);
-                if (prefix.equals(EVENT_PREFIX)) {
-                    campaignName = campaignName.replace(EVENT_PREFIX, "");
-                } else if (prefix.equals(POST_PREFIX)) {
-                    campaignName = removePostPrefix(campaignName);
+                switch (prefix) {
+                case CZ_EVENT_PREFIX:
+                    campaignName = campaignName.replace(CZ_EVENT_PREFIX, "");
+                    break;
+                case CZ_POST_PREFIX:
+                case EN_POST_PREFIX:
+                    campaignName = removePostPrefix(campaignName, prefix);
+                    break;
+                default:
+                    break;
                 }
 
                 item = new InvoiceItem(campaignName, extractPrice(totalPrice), prefix);
@@ -155,8 +169,16 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
         return Double.valueOf(finalStringPrice.replace(" ", ""));
     }
 
-    public String removePostPrefix(String campaignName) {
-        String trimmedName = campaignName.replace(POST_PREFIX, "");
+    /**
+     * 
+     * @param campaignName, i.e. Příspěvek: „Mezi námi žije spousta lidí,
+     *                      kteří se potýkají s...“
+     * @param prefix        i.e. Příspěvek:
+     * @return i.e. Mezi námi žije spousta lidí, kteří se potýkají s...
+     */
+    public String removePostPrefix(String campaignName, String prefix) {
+
+        String trimmedName = campaignName.replace(prefix, "");
         StringBuilder builder = new StringBuilder(trimmedName);
         // delete quotes at the start and end
         builder = builder.deleteCharAt(0);
@@ -169,24 +191,26 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
     public String processPrefix(String campaignName) {
 
         log.debug("Processing prefix: {}", campaignName);
-        if (campaignName.startsWith(EVENT_PREFIX)) {
-            return EVENT_PREFIX;
-
-        } else if (campaignName.startsWith(POST_PREFIX)) {
-            campaignName = campaignName.replace(POST_PREFIX, "");
-            StringBuilder builder = new StringBuilder(campaignName);
-            // delete quotes at the start and end
-            builder = builder.deleteCharAt(0);
-            builder = builder.deleteCharAt(builder.length() - 1);
-            campaignName = builder.toString();
-            log.debug("campaign name  {}", campaignName);
-            log.debug("returning post prefix");
-
-            return POST_PREFIX;
-        }
-
-        else
+        if (campaignName.startsWith(CZ_EVENT_PREFIX)) {
+            return CZ_EVENT_PREFIX;
+        } else if (campaignName.startsWith(CZ_POST_PREFIX)) {
+            return processPostPrefix(campaignName, CZ_POST_PREFIX);
+        } else if (campaignName.startsWith(EN_POST_PREFIX)) {
+            return processPostPrefix(campaignName, EN_POST_PREFIX);
+        } else
             return "";
+    }
+
+    public String processPostPrefix(String campaignName, String prefix) {
+
+        campaignName = campaignName.replace(prefix, "");
+        StringBuilder builder = new StringBuilder(campaignName);
+        // delete quotes at the start and end
+        builder = builder.deleteCharAt(0);
+        builder = builder.deleteCharAt(builder.length() - 1);
+        campaignName = builder.toString();
+
+        return prefix;
 
     }
 

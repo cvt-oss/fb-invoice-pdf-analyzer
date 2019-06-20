@@ -21,6 +21,7 @@
 .springBeans
 /build
 /code
+test-invoices/
 redeploy.sh
 MANIFEST.MF
 _site/

@@ -39,10 +39,10 @@ public class TestUtils {
         invoice.setTransactionId(randomString());
         invoice.setCurrency(Currency.getInstance("CZK"));
 
-        InvoiceItem item = new InvoiceItem(randomString(), new Double(1950.86), FacebookParserServiceImpl.EVENT_PREFIX);
+        InvoiceItem item = new InvoiceItem(randomString(), new Double(1950.86), FacebookParserServiceImpl.CZ_EVENT_PREFIX);
         invoice.addInvoiceItem(item);
 
-        InvoiceItem item2 = new InvoiceItem(randomString(), new Double(257.97), FacebookParserServiceImpl.POST_PREFIX);
+        InvoiceItem item2 = new InvoiceItem(randomString(), new Double(257.97), FacebookParserServiceImpl.CZ_POST_PREFIX);
         invoice.addInvoiceItem(item2);
 
         return invoice;
