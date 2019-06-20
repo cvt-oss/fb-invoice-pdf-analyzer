@@ -61,6 +61,7 @@ public class FacebookParserServiceTest {
 
     @Test
     public void parsePDFTest() throws FileNotFoundException, IOException {
+        
         Invoice result = parser.parse(new DataInputStream(new FileInputStream(invoicePDF)));
         assertThat(result).isEqualTo(invoice);
     }

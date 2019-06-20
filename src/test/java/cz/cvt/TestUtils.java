@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Currency;
 import java.util.UUID;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -36,6 +37,7 @@ public class TestUtils {
         invoice.setReferentialNumber(randomString());
         invoice.setTotalPaid(new Double(36000.00));
         invoice.setTransactionId(randomString());
+        invoice.setCurrency(Currency.getInstance("CZK"));
 
         InvoiceItem item = new InvoiceItem(randomString(), new Double(1950.86), FacebookParserServiceImpl.EVENT_PREFIX);
         invoice.addInvoiceItem(item);
@@ -68,8 +70,9 @@ public class TestUtils {
         addLine(contents, FacebookParserServiceImpl.REFERENTIAL_NUMBER + invoice.getReferentialNumber());
         addLine(contents, FacebookParserServiceImpl.TRANSACTION_ID);
         addLine(contents, invoice.getTransactionId());
-        addLine(contents, FacebookParserServiceImpl.AMOUNT_PAID);
-        addLine(contents, extractStringPrice(invoice.getTotalPaid()));
+        addLine(contents,
+                FacebookParserServiceImpl.AMOUNT_PAID);
+        addLine(contents, extractStringPrice(invoice.getTotalPaid())+ " (" + Currency.getInstance("CZK").getCurrencyCode() + ")");
         addLine(contents, FacebookParserServiceImpl.METADATA_END_DELIMITER);
 
         invoice.getInvoiceItems().forEach(item -> {
