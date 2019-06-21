@@ -105,7 +105,15 @@
 									<goal>native-image</goal>
 								</goals>
 								<configuration>
+									<!-- workarounad until official quarkus extension is out -->
 									<enableHttpUrlHandler>true</enableHttpUrlHandler>
+									<additionalBuildArgs>
+										<additionalBuildArg>-H:IncludeResources=.*/additional.txt$</additionalBuildArg>
+										<additionalBuildArg>-H:IncludeResources=.*/Identity-H$</additionalBuildArg>
+									</additionalBuildArgs>
+
+
+									<enableJni>true</enableJni>
 								</configuration>
 							</execution>
 						</executions>

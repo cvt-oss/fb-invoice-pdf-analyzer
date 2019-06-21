@@ -30,10 +30,10 @@ services:
     networks:
       - cvt-pdf-analyzer-network
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://psql:5432/${POSTGRES_DB}
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-      - SPRING_PROFILES_ACTIVE
+      - QUARKUS_DATASOURCE_URL=jdbc:postgresql://psql:5432/${POSTGRES_DB}
+      - QUARKUS_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - QUARKUS_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=none
 
 volumes:
   psql-data:

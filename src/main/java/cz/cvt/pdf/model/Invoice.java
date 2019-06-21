@@ -6,15 +6,17 @@ import java.util.Currency;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @Entity
-
+@RegisterForReflection
 public class Invoice extends PanacheEntity {
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoice")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoice", fetch = FetchType.EAGER)
   public List<InvoiceItem> invoiceItems = new ArrayList<InvoiceItem>();
 
   public String accountId;
@@ -28,7 +30,7 @@ public class Invoice extends PanacheEntity {
   public void addInvoiceItem(InvoiceItem item) {
     invoiceItems.add(item);
     item.invoice = this;
-    
+
   }
 
   public void removeInvoiceItem(InvoiceItem item) {

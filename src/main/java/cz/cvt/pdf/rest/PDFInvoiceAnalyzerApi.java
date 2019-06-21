@@ -19,8 +19,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cz.cvt.pdf.model.Invoice;
 import cz.cvt.pdf.service.api.InvoiceParserService;
@@ -33,22 +34,22 @@ public class PDFInvoiceAnalyzerApi {
     @Inject
     InvoiceParserService pdfService;
 
-    private static final Logger log = Logger.getLogger(PDFInvoiceAnalyzerApi.class);
+    private static final Logger log = LoggerFactory.getLogger(PDFInvoiceAnalyzerApi.class);
 
     @POST
     @Path("/invoice/process")
     @Transactional
-
     public Response processInvoice(@MultipartForm FormData formData) throws IOException {
 
         try {
             File file = formData.getPdfFile();
             InputStream is = new FileInputStream(file);
             Invoice invoice = pdfService.parse(is);
-            invoice.originalFileName = file.getName();
+           // invoice.originalFileName = file.getName();
             invoice.persist();
-            file.delete();
+            //file.delete();
 
+            log.info("invoice persisted with id:"+invoice.id);
             return Response.ok(new InvoiceResponse(invoice.id)).build();
         } catch (IOException e) {
             e.printStackTrace();

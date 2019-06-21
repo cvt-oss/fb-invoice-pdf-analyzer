@@ -12,14 +12,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-CREATE SEQUENCE public.INVOICE_SEQUENCE
+CREATE SEQUENCE public.hibernate_sequence
     START WITH 1
     INCREMENT BY 1;
-
-CREATE SEQUENCE public.INVOICE_ITEM_SEQUENCE
-   START WITH 1
-   INCREMENT BY 1;
-
 
 CREATE TABLE public.invoice (
     id bigint NOT NULL,

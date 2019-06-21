@@ -1,13 +1,16 @@
 package cz.cvt.pdf.quarkus;
 
-import org.graalvm.nativeimage.Feature;
-
 import com.oracle.svm.core.annotate.AutomaticFeature;
 import com.oracle.svm.hosted.jni.JNIRuntimeAccess;
+
+import org.graalvm.nativeimage.Feature;
 
 import sun.java2d.DefaultDisposerRecord;
 
 @AutomaticFeature
+/**
+ * workarounad until official quarkus extension is out 
+ */
 class JNIRegistrationFeature implements Feature {
 
     @Override

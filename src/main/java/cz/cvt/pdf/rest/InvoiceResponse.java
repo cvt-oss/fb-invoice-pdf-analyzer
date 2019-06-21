@@ -2,10 +2,14 @@ package cz.cvt.pdf.rest;
 
 import java.util.Objects;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class InvoiceResponse {
     private Long id;
 
-    public InvoiceResponse(){}
+    public InvoiceResponse() {
+    }
 
     public InvoiceResponse(Long id) {
         this.id = id;

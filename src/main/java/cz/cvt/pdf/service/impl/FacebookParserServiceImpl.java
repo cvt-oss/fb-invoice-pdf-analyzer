@@ -46,11 +46,9 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
         PDDocument doc = PDDocument.load(is);
         String invoiceText = stripper.getText(doc);
 
-        log.debugf("invoice text extracted :\n %s ", invoiceText);
         String metadata = invoiceText.substring(0, invoiceText.indexOf(METADATA_END_DELIMITER));
 
         Invoice invoice = extractMetadata(metadata);
-        log.debugf("invoice metadata extracted :\n %s", invoice.toString());
 
         String invoiceItems = invoiceText.substring(
                 invoiceText.indexOf(METADATA_END_DELIMITER) + METADATA_END_DELIMITER.length(),
