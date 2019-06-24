@@ -23,6 +23,7 @@ import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -42,15 +43,16 @@ public class PDFInvoiceAnalyzerApi {
 
     private static final Logger log = LoggerFactory.getLogger(PDFInvoiceAnalyzerApi.class);
 
-    @POST @Path("/invoice/process")
-    @Transactional 
-    @APIResponses(value={
-        @APIResponse(responseCode="200",description="Invoice processed succsesfully",content=@Content(mediaType="application/json",schema=@Schema(implementation=InvoiceResponse.class))),
-        @APIResponse(responseCode="400",description="Bad Request")
-    })
+    @POST
+    @Path("/invoice/process")
+    @Transactional
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "Invoice processed succsesfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InvoiceResponse.class))),
+            @APIResponse(responseCode = "400", description = "Bad Request") })
     @Operation(summary = "Parse and store Facebook PDF invoice")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response processInvoice(MultipartFormDataInput input)
+    public Response processInvoice(
+            @RequestBody(content = @Content(mediaType = "multipart/form-data", schema = @Schema(type = SchemaType.OBJECT))) MultipartFormDataInput input)
             throws IOException {
 
         try {
