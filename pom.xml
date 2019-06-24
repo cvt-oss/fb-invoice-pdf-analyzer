@@ -61,6 +61,11 @@
 
 		<dependency>
 			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-smallrye-openapi</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.quarkus</groupId>
 			<artifactId>quarkus-arc</artifactId>
 		</dependency>
 
@@ -111,8 +116,6 @@
 										<additionalBuildArg>-H:IncludeResources=.*/additional.txt$</additionalBuildArg>
 										<additionalBuildArg>-H:IncludeResources=.*/Identity-H$</additionalBuildArg>
 									</additionalBuildArgs>
-
-
 									<enableJni>true</enableJni>
 								</configuration>
 							</execution>

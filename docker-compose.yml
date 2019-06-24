@@ -33,7 +33,9 @@ services:
       - QUARKUS_DATASOURCE_URL=jdbc:postgresql://psql:5432/${POSTGRES_DB}
       - QUARKUS_DATASOURCE_USERNAME=${POSTGRES_USER}
       - QUARKUS_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
-      - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=none
+# it's not possible to specify bellow property env due to missing quarkus support for it
+# https://github.com/quarkusio/quarkus/issues/2933     
+#      - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=none
 
 volumes:
   psql-data:
