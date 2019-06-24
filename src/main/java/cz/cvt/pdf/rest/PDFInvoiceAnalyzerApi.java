@@ -16,6 +16,15 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.slf4j.Logger;
@@ -26,7 +35,6 @@ import cz.cvt.pdf.service.api.InvoiceParserService;
 
 @Path("/api/pdf")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.MULTIPART_FORM_DATA)
 public class PDFInvoiceAnalyzerApi {
 
     @Inject
@@ -34,10 +42,16 @@ public class PDFInvoiceAnalyzerApi {
 
     private static final Logger log = LoggerFactory.getLogger(PDFInvoiceAnalyzerApi.class);
 
-    @POST
-    @Path("/invoice/process")
-    @Transactional
-    public Response processInvoice(MultipartFormDataInput input) throws IOException {
+    @POST @Path("/invoice/process")
+    @Transactional 
+    @APIResponses(value={
+        @APIResponse(responseCode="200",description="Invoice processed succsesfully",content=@Content(mediaType="application/json",schema=@Schema(implementation=InvoiceResponse.class))),
+        @APIResponse(responseCode="400",description="Bad Request")
+    })
+    @Operation(summary = "Parse and store Facebook PDF invoice")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response processInvoice(MultipartFormDataInput input)
+            throws IOException {
 
         try {
 
