@@ -2,14 +2,14 @@ package cz.cvt.pdf.rest.health;
 
 import javax.inject.Inject;
 
-import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
+import org.eclipse.microprofile.health.Readiness;
 
 import io.agroal.api.AgroalDataSource;
 
-@Health
+@Readiness
 public class DatabaseHealthCheck implements HealthCheck {
     @Inject
     AgroalDataSource ds;
