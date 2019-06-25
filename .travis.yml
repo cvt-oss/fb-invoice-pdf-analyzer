@@ -3,7 +3,7 @@ services:
   - docker
 sudo: required
 jdk:
- - oraclejdk8
+ - oraclejdk11
 cache:
   directories:
   - $HOME/.m2
