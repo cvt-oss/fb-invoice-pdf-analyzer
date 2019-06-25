@@ -101,4 +101,4 @@ docker-compose down --volumes
 
 Application readiness can be determined via `/health/ready` endpoint and liveness can be retrieved via `/health/live`
 
-Swagger doc is available at `/swagger-ui` and openapi spec is available at `/openapi`
+Swagger doc is available at `/swagger-ui` (only in quarkus:dev mode) and openapi spec is available at `/openapi`
