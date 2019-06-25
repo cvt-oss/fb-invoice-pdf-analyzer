@@ -1,0 +1,9 @@
+language: java
+services:
+  - docker
+sudo: required
+jdk:
+ - openjdk11
+cache:
+  directories:
+  - $HOME/.m2
