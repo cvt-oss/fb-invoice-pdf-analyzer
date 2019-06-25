@@ -16,16 +16,13 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.slf4j.Logger;
@@ -51,9 +48,7 @@ public class PDFInvoiceAnalyzerApi {
             @APIResponse(responseCode = "400", description = "Bad Request") })
     @Operation(summary = "Parse and store Facebook PDF invoice")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response processInvoice(
-            @RequestBody(content = @Content(mediaType = "multipart/form-data", schema = @Schema(type = SchemaType.OBJECT))) MultipartFormDataInput input)
-            throws IOException {
+    public Response processInvoice(MultipartFormDataInput input) throws IOException {
 
         try {
 

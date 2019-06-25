@@ -127,6 +127,7 @@ public class FacebookParserServiceImpl implements InvoiceParserService {
 
             if (line.startsWith(ACCOUNT_ID)) {
                 invoice.accountId = line.replace(ACCOUNT_ID, "");
+                
             }
 
             else if (line.startsWith(REFERENTIAL_NUMBER)) {
