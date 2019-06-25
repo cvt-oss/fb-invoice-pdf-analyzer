@@ -15,7 +15,6 @@ The app will be available at :8080 and any code change will be reflected automat
  - Build the source and produce native executable binary, this can take up to 5 min.
 ```
 mvn clean package -Pnative -Dnative-image.container-runtime=docker
-
 ```
  - Start the application:
  ```
