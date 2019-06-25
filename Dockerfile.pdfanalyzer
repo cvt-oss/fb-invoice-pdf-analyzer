@@ -1,6 +1,8 @@
 FROM registry.access.redhat.com/ubi8/ubi-minimal
 WORKDIR /work/
 COPY target/*-runner /work/application
-RUN chmod 775 /work
+RUN chmod 775 /work/application
 EXPOSE 8080
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /work/wait
+RUN chmod +x /work/wait
+CMD ./wait && ./application -Dquarkus.http.host=0.0.0.0

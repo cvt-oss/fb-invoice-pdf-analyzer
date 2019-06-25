@@ -30,6 +30,8 @@ services:
     networks:
       - cvt-pdf-analyzer-network
     environment:
+      - WAIT_HOSTS=psql:5432
+      - WAIT_HOSTS_TIMEOUT=8
       - QUARKUS_DATASOURCE_URL=jdbc:postgresql://psql:5432/${POSTGRES_DB}
       - QUARKUS_DATASOURCE_USERNAME=${POSTGRES_USER}
       - QUARKUS_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
