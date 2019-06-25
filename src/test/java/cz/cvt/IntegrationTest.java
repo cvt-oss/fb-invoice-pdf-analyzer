@@ -8,12 +8,15 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
 import cz.cvt.pdf.model.Invoice;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.internal.util.IOUtils;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
 
 @QuarkusTest
 
@@ -36,6 +39,14 @@ public class IntegrationTest {
                 .post("/api/pdf/invoice/process").then().statusCode(200).extract().response();
 
         // TODO GET request
+
+    }
+
+    @Test
+    public void healthCheck() {
+
+        given().when().get("/health/ready").then().statusCode(200).body(containsString("\"status\": \"UP\""));
+        given().when().get("/health/live").then().statusCode(200).body(containsString("\"status\": \"UP\""));
 
     }
 
