@@ -1,11 +1,22 @@
 This service parses and store Facebook invoice for campaigns.
 
-### Installation:
+### Installation in dev mode
 
- - Build the source:
- ```
- mvn clean package
- ```
+Since compilation into quarkus native images takes quite some time, you probably don't want to do it too frequently during development. Quarkus supports hot replace during runtime through following command:
+
+```
+mvn compile quarkus:dev
+```
+
+The app will be available at :8080 and any code change will be reflected automatically.
+
+### Installation in prod:
+
+ - Build the source and produce native executable binary, this can take up to 5 min.
+```
+mvn clean package -Pnative -Dnative-image.container-runtime=docker
+
+```
  - Start the application:
  ```
  docker-compose up --build -d
@@ -88,6 +99,6 @@ If you want to clear database content as well:
 docker-compose down --volumes
 ```
 
-Application health can be determined via `/actuator/health` endpoint and info can be retrieved via `/actuator/info`
+Application readiness can be determined via `/health/ready` endpoint and liveness can be retrieved via `/health/live`
 
-If env property `SPRING_PROFILES_ACTIVE` contains `swagger` then swagger documentation is available at `/swagger-ui.html`
+Swagger doc is available at `/swagger-ui` and openapi spec is available at `/openapi`
