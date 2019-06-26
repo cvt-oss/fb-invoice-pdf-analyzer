@@ -10,8 +10,6 @@ services:
     volumes:
       - "psql-data:/var/lib/postgresql/data"
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
-    networks:
-      - cvt-pdf-analyzer-network
     environment:
       - POSTGRES_PASSWORD
       - POSTGRES_USER
@@ -27,8 +25,6 @@ services:
       - "8080:8080"
     depends_on:
       - psql      
-    networks:
-      - cvt-pdf-analyzer-network
     environment:
       - WAIT_HOSTS=psql:5432
       - WAIT_HOSTS_TIMEOUT=8
@@ -43,5 +39,7 @@ volumes:
   psql-data:
 
 networks:
-  cvt-pdf-analyzer-network:
+  default:
+    external:
+      name: cvt-oss
 
