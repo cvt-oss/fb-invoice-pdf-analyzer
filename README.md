@@ -10,6 +10,7 @@ This service parses and store Facebook invoice for campaigns
  ```
  - Start the application:
  ```
+ docker network create cvt-oss # just once
  docker-compose up --build -d
  ```
 
