@@ -1,4 +1,6 @@
-This service parses and store Facebook invoice for campaigns.
+This service parses and store Facebook invoice for campaigns
+
+[![Build Status](https://travis-ci.com/cvt-oss/fb-invoice-pdf-analyzer.svg?branch=quarkus)](https://travis-ci.com/cvt-oss/fb-invoice-pdf-analyzer)
 
 ### Installation in dev mode
 
