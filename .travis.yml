@@ -8,5 +8,5 @@ cache:
   directories:
   - $HOME/.m2
 script:
-  - mvn clean test
-  - mvn clean package -Pnative -Dnative-image.container-runtime=docker
+  - mvn clean test -B
+  - mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Pnative -Dnative-image.container-runtime=docker
