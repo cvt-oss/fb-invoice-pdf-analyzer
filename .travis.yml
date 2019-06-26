@@ -1,4 +1,7 @@
 language: java
+install: "mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Pnative -Dnative-image.container-runtime=docker"
+script:
+  - mvn clean test -B
 services:
   - docker
 sudo: required
@@ -7,6 +10,4 @@ jdk:
 cache:
   directories:
   - $HOME/.m2
-script:
-  - mvn clean test -B
-  - mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Pnative -Dnative-image.container-runtime=docker
+
